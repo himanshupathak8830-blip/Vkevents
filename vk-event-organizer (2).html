@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VK Event Organizer – Vivek Kumar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brown-deep: #2C1A0E;
+    --brown-dark: #3D2314;
+    --brown-mid: #6B3A1F;
+    --brown-warm: #8B4513;
+    --brown-light: #A0522D;
+    --gold: #C9973A;
+    --gold-light: #E8C06A;
+    --gold-pale: #F5E6C8;
+    --cream: #FAF3E8;
+    --cream-dark: #F0E0C0;
+    --white: #FFFFFF;
+    --text-dark: #1A0F07;
+    --text-mid: #4A2C15;
+    --text-muted: #8B6E4E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+    background: rgba(44, 26, 14, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201, 151, 58, 0.3);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+  .nav-logo span { color: var(--gold-light); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--cream); text-decoration: none;
+    font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--brown-deep) 0%, var(--brown-dark) 40%, var(--brown-mid) 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    text-align: center; padding: 2rem;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,151,58,0.12) 0%, transparent 70%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9973A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-ornament {
+    position: absolute; width: 500px; height: 500px;
+    border: 1px solid rgba(201,151,58,0.15);
+    border-radius: 50%; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 4s ease-in-out infinite;
+  }
+  .hero-ornament::before {
+    content: ''; position: absolute; inset: 30px;
+    border: 1px solid rgba(201,151,58,0.1); border-radius: 50%;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 800px; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(201,151,58,0.15);
+    border: 1px solid rgba(201,151,58,0.4);
+    color: var(--gold-light);
+    font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+    padding: 6px 20px; border-radius: 20px; margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  .hero-logo-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; font-weight: 700;
+    color: var(--gold);
+    line-height: 1; margin-bottom: 0.5rem;
+    text-shadow: 0 0 60px rgba(201,151,58,0.3);
+  }
+  .hero-tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 1.5rem; font-weight: 300;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 700; line-height: 1.05;
+    color: var(--white); margin-bottom: 0.5rem;
+  }
+  .hero h1 span { color: var(--gold); font-style: italic; }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 300;
+    color: rgba(250,243,232,0.8);
+    margin-bottom: 0.75rem; letter-spacing: 1px;
+  }
+  .hero-host {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; color: var(--gold-light);
+    letter-spacing: 2px; margin-bottom: 2.5rem;
+  }
+  .hero-divider {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1.5rem auto;
+  }
+  .hero-services {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .hero-services span {
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--cream-dark); font-weight: 400;
+  }
+  .hero-services .dot { color: var(--gold); }
+  .hero-cta {
+    display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold) 0%, #A0782A 100%);
+    color: var(--brown-deep); border: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; padding: 14px 32px; border-radius: 2px;
+    text-decoration: none; transition: all 0.3s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,151,58,0.4); }
+  .btn-outline {
+    background: transparent; color: var(--gold);
+    border: 1px solid rgba(201,151,58,0.5); cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase; padding: 14px 32px; border-radius: 2px;
+    text-decoration: none; transition: all 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(201,151,58,0.1); }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 6rem 2rem; }
+  .section-label {
+    font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); font-weight: 600; margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::before, .section-label::after {
+    content: ''; flex: 1; max-width: 40px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .section-label::after { background: linear-gradient(90deg, var(--gold), transparent); }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700; color: var(--brown-deep);
+    line-height: 1.2;
+  }
+  .section-title em { color: var(--gold); font-style: italic; }
+  .section-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; color: var(--text-muted);
+    font-weight: 400; margin-top: 0.75rem; max-width: 600px;
+  }
+  .section-header { text-align: center; margin-bottom: 4rem; }
+  .section-header .section-label { justify-content: center; }
+  .section-header .section-subtitle { margin: 0.75rem auto 0; }
+
+  /* ── ABOUT / PROMISE ── */
+  .about-section { background: var(--white); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .about-img-wrap {
+    position: relative;
+    background: linear-gradient(135deg, var(--brown-deep), var(--brown-mid));
+    border-radius: 4px; overflow: hidden;
+    min-height: 400px; display: flex; align-items: center; justify-content: center;
+  }
+  .about-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .about-img-placeholder {
+    text-align: center; color: rgba(201,151,58,0.6);
+    font-family: 'Playfair Display', serif; font-size: 1rem;
+    padding: 2rem;
+  }
+  .about-img-placeholder .big { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
+  .upload-overlay {
+    position: absolute; inset: 0; background: rgba(44,26,14,0.7);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: 0.3s; cursor: pointer;
+    flex-direction: column; gap: 0.5rem; color: var(--gold);
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .about-img-wrap:hover .upload-overlay { opacity: 1; }
+  .about-img-wrap input[type=file] { display: none; }
+  .upload-icon { font-size: 2rem; }
+  .about-text .section-label { justify-content: flex-start; }
+  .about-text .section-label::before { display: none; }
+  .pillars { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .pillar {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1rem; border-left: 2px solid var(--gold);
+    background: linear-gradient(90deg, rgba(201,151,58,0.05), transparent);
+  }
+  .pillar-icon {
+    width: 36px; height: 36px; min-width: 36px;
+    background: rgba(201,151,58,0.15);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .pillar h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 600; color: var(--brown-deep); margin-bottom: 0.25rem; }
+  .pillar p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── SERVICES ── */
+  .services-section { background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%); }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+  .service-card {
+    background: var(--white);
+    border: 1px solid rgba(139,69,19,0.12);
+    border-radius: 4px; overflow: hidden;
+    transition: all 0.3s; position: relative;
+    box-shadow: 0 2px 15px rgba(61,35,20,0.05);
+  }
+  .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(61,35,20,0.12); }
+  .service-img-area {
+    height: 200px; background: linear-gradient(135deg, var(--brown-deep), var(--brown-mid));
+    position: relative; overflow: hidden; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .service-img-area img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .service-img-placeholder {
+    text-align: center; color: rgba(201,151,58,0.7); font-size: 2.5rem;
+  }
+  .service-img-area input[type=file] { display: none; }
+  .service-img-area .upload-overlay { font-size: 0.65rem; }
+  .service-body { padding: 1.25rem 1.5rem; }
+  .service-icon-badge {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #A0782A);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-bottom: 0.75rem;
+  }
+  .service-body h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--brown-deep); margin-bottom: 0.4rem; }
+  .service-body p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.7; }
+  .service-tag {
+    display: inline-block; margin-top: 0.75rem;
+    background: rgba(201,151,58,0.1); color: var(--gold);
+    font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 20px; font-weight: 600;
+  }
+  .add-photo-hint { font-size: 0.65rem; color: rgba(201,151,58,0.6); text-align: center; margin-top: 0.5rem; }
+
+  /* ── HOSPITALITY ── */
+  .hospitality-section { background: var(--brown-deep); }
+  .hospitality-section .section-title { color: var(--white); }
+  .hospitality-section .section-subtitle { color: rgba(250,243,232,0.7); }
+  .hosp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .hosp-img-col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .hosp-img-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,151,58,0.2);
+    border-radius: 4px; overflow: hidden;
+    position: relative; cursor: pointer;
+    min-height: 150px; display: flex; align-items: center; justify-content: center;
+  }
+  .hosp-img-box:first-child { grid-column: span 2; min-height: 220px; }
+  .hosp-img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hosp-img-placeholder { text-align: center; color: rgba(201,151,58,0.5); font-size: 1.5rem; }
+  .hosp-img-box input[type=file] { display: none; }
+  .hosp-text .section-label { justify-content: flex-start; }
+  .hosp-text .section-label::before { display: none; }
+  .hosp-text .section-title { margin-bottom: 1.5rem; }
+  .hosp-items { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .hosp-item {
+    display: flex; gap: 1rem; align-items: flex-start;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,151,58,0.15);
+    padding: 1rem 1.25rem; border-radius: 4px;
+    transition: 0.3s;
+  }
+  .hosp-item:hover { background: rgba(201,151,58,0.08); border-color: rgba(201,151,58,0.3); }
+  .hosp-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; color: var(--gold);
+    font-weight: 700; line-height: 1; min-width: 32px;
+  }
+  .hosp-item h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--gold-light); margin-bottom: 0.25rem; }
+  .hosp-item p { font-size: 0.78rem; color: rgba(250,243,232,0.6); line-height: 1.6; }
+
+  /* ── WHY US ── */
+  .why-section { background: var(--white); }
+  .why-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+  .why-card {
+    text-align: center; padding: 2rem 1rem;
+    border: 1px solid rgba(139,69,19,0.1);
+    border-radius: 4px; transition: 0.3s;
+  }
+  .why-card:hover { background: linear-gradient(180deg, rgba(201,151,58,0.05), transparent); border-color: var(--gold); transform: translateY(-3px); }
+  .why-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+  .why-card h4 { font-family: 'Playfair Display', serif; font-size: 0.9rem; color: var(--brown-deep); margin-bottom: 0.4rem; font-weight: 600; }
+  .why-card p { font-size: 0.72rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── GALLERY ── */
+  .gallery-section { background: var(--cream-dark); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 200px;
+    gap: 0.75rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .gallery-cell {
+    background: linear-gradient(135deg, var(--brown-dark), var(--brown-mid));
+    border-radius: 4px; overflow: hidden;
+    position: relative; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.3s;
+  }
+  .gallery-cell:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-cell:nth-child(4) { grid-column: span 2; }
+  .gallery-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery-cell input[type=file] { display: none; }
+  .gallery-cell .gallery-placeholder { text-align: center; color: rgba(201,151,58,0.5); }
+  .gallery-cell .gallery-placeholder span { font-size: 2rem; display: block; }
+  .gallery-cell .gallery-placeholder p { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 0.5rem; color: rgba(201,151,58,0.4); }
+  .gallery-cell:hover .upload-overlay { opacity: 1; }
+  .add-gallery-btn {
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    border: 2px dashed rgba(201,151,58,0.3); background: rgba(201,151,58,0.04);
+    cursor: pointer; gap: 0.5rem;
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(201,151,58,0.6);
+  }
+  .add-gallery-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,151,58,0.08); }
+  .add-gallery-btn .plus { font-size: 1.5rem; }
+
+  /* ── COVERAGE ── */
+  .coverage-section {
+    background: linear-gradient(135deg, var(--gold) 0%, #A0782A 100%);
+    text-align: center; padding: 3rem 2rem;
+  }
+  .coverage-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 600;
+    color: var(--brown-deep); letter-spacing: 3px; text-transform: uppercase;
+  }
+  .coverage-section p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; color: var(--brown-deep); font-weight: 700;
+    margin-top: 0.5rem;
+  }
+  .coverage-ornament { color: rgba(44,26,14,0.3); letter-spacing: 10px; font-size: 0.8rem; margin-top: 0.75rem; }
+
+  /* ── CONTACT ── */
+  .contact-section { background: linear-gradient(180deg, var(--brown-dark) 0%, var(--brown-deep) 100%); }
+  .contact-section .section-title { color: var(--white); }
+  .contact-section .section-subtitle { color: rgba(250,243,232,0.6); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; max-width: 1000px; margin: 0 auto; }
+  .contact-info h3 {
+    font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1rem; margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+  .contact-detail {
+    display: flex; gap: 1rem; align-items: center; margin-bottom: 1.25rem;
+    padding: 1rem; background: rgba(255,255,255,0.04);
+    border-left: 2px solid var(--gold); border-radius: 2px;
+  }
+  .contact-detail .icon { font-size: 1.4rem; min-width: 30px; }
+  .contact-detail p { font-size: 0.75rem; color: rgba(250,243,232,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.2rem; }
+  .contact-detail a, .contact-detail span { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1.2rem; font-weight: 600; text-decoration: none; }
+  .contact-form h3 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1rem; margin-bottom: 1.5rem; letter-spacing: 1px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(250,243,232,0.5); margin-bottom: 0.5rem; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(201,151,58,0.2);
+    border-radius: 2px; color: var(--white);
+    font-family: 'Montserrat', sans-serif; font-size: 0.8rem;
+    outline: none; transition: border-color 0.3s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+  .form-group select option { background: var(--brown-deep); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .btn-submit {
+    width: 100%; padding: 1rem;
+    background: linear-gradient(135deg, var(--gold), #A0782A);
+    color: var(--brown-deep); border: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-size: 0.75rem;
+    font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    border-radius: 2px; transition: all 0.3s;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(201,151,58,0.4); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--brown-deep);
+    border-top: 1px solid rgba(201,151,58,0.2);
+    text-align: center; padding: 2rem;
+  }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); letter-spacing: 4px; }
+  .footer-tagline { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: rgba(250,243,232,0.5); margin: 0.5rem 0 1.5rem; letter-spacing: 2px; }
+  .footer-divider { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 1.5rem auto; }
+  .footer-copy { font-size: 0.65rem; color: rgba(250,243,232,0.3); letter-spacing: 1px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .about-grid, .hosp-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .why-grid { grid-template-columns: repeat(3, 1fr); }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-cell:nth-child(1) { grid-column: span 1; }
+    .gallery-cell:nth-child(4) { grid-column: span 1; }
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .why-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+    .hosp-img-col { grid-template-columns: 1fr; }
+    .hosp-img-box:first-child { grid-column: span 1; }
+  }
+
+  /* Upload toast */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--brown-deep); border: 1px solid var(--gold);
+    color: var(--gold-light); padding: 1rem 1.5rem; border-radius: 4px;
+    font-size: 0.8rem; z-index: 9999; opacity: 0;
+    transition: opacity 0.3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+
+  /* Database Settings Button and Modal Styles */
+  .db-settings-btn {
+    position: fixed; bottom: 2rem; left: 2rem;
+    width: 45px; height: 45px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, #A0782A 100%);
+    border: none; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 1.25rem; color: var(--brown-deep);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 999;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .db-settings-btn:hover {
+    transform: rotate(30deg) scale(1.1);
+    box-shadow: 0 6px 20px rgba(201,151,58,0.5);
+  }
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+    z-index: 10000; display: flex;
+    align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-container {
+    background: var(--brown-deep); border: 1px solid var(--gold);
+    border-radius: 8px; width: 90%; max-width: 650px;
+    max-height: 85vh; display: flex; flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: translateY(20px); transition: transform 0.3s;
+  }
+  .modal-overlay.open .modal-container { transform: translateY(0); }
+  .modal-header {
+    padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(201,151,58,0.2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .modal-header h3 { font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 1.25rem; }
+  .modal-close { background: transparent; border: none; color: var(--gold); font-size: 1.5rem; cursor: pointer; }
+  .modal-body { padding: 1.5rem; overflow-y: auto; color: var(--cream); font-size: 0.82rem; line-height: 1.6; }
+  .modal-body h4 { color: var(--gold); margin-top: 1.25rem; margin-bottom: 0.5rem; font-family: 'Playfair Display', serif; }
+  .modal-body ol { margin-left: 1.25rem; margin-bottom: 1rem; }
+  .modal-body li { margin-bottom: 0.5rem; }
+  .code-block-container { position: relative; margin: 1rem 0; }
+  .code-block {
+    background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(201,151,58,0.25);
+    padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.72rem;
+    overflow-x: auto; white-space: pre; max-height: 250px; color: #e2e8f0;
+  }
+  .copy-btn {
+    position: absolute; top: 0.5rem; right: 0.5rem;
+    background: var(--gold); color: var(--brown-deep); border: none;
+    padding: 4px 10px; font-size: 0.65rem; border-radius: 2px;
+    cursor: pointer; font-weight: 600;
+  }
+  .copy-btn:hover { background: var(--gold-light); }
+  .modal-footer {
+    padding: 1.25rem 1.5rem; border-top: 1px solid rgba(201,151,58,0.2);
+    display: flex; justify-content: flex-end; gap: 1rem;
+  }
+  .uploading-overlay {
+    position: absolute; inset: 0; background: rgba(44, 26, 14, 0.85);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 0.5rem; color: var(--gold); z-index: 10;
+  }
+  .spinner {
+    width: 28px; height: 28px; border: 3px solid rgba(201, 151, 58, 0.2);
+    border-top: 3px solid var(--gold); border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">V<span>K</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#hospitality">Hospitality</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="btn-primary" style="font-size:0.65rem;padding:10px 20px;">Book Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ornament"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Crafting Extraordinary Memories ✦</div>
+    <div class="hero-logo-mark">VK</div>
+    <div class="hero-tagline">We Plan · We Manage · You Celebrate</div>
+    <h1>Event <span>Organizer</span></h1>
+    <p class="hero-sub">Making Your Moments Unforgettable</p>
+    <div class="hero-divider"></div>
+    <div class="hero-host">Your Host — <strong>Vivek Kumar</strong></div>
+    <div class="hero-services">
+      <span>Weddings</span><span class="dot">✦</span>
+      <span>Parties</span><span class="dot">✦</span>
+      <span>Corporate Events</span><span class="dot">✦</span>
+      <span>Birthdays</span><span class="dot">✦</span>
+      <span>Anniversaries</span><span class="dot">✦</span>
+      <span>Haldi Ceremony</span><span class="dot">✦</span>
+      <span>Hospitality</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#services" class="btn-primary">Our Services</a>
+      <a href="tel:6203924850" class="btn-outline">📞 6203-924-850</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap" id="aboutImgWrap" onclick="triggerUpload('aboutImg')">
+      <img id="aboutImgPreview" src="" alt="About VK Events" style="display:none;">
+      <div class="about-img-placeholder" id="aboutImgPlaceholder">
+        <span class="big">🎊</span>
+        <p>Your Event Photo Here</p>
+        <p style="font-size:0.7rem;margin-top:0.5rem;color:rgba(201,151,58,0.5);">Click to upload</p>
+      </div>
+      <div class="upload-overlay">
+        <span class="upload-icon">📷</span>
+        <span>Upload Photo</span>
+      </div>
+      <input type="file" id="aboutImg" accept="image/*" onchange="loadImage(this, 'aboutImgPreview', 'aboutImgPlaceholder')">
+    </div>
+    <div class="about-text">
+      <div class="section-label">About Us</div>
+      <h2 class="section-title">Your Vision,<br><em>Our Passion</em></h2>
+      <p class="section-subtitle">At VK Events, we transform your dreams into unforgettable celebrations across Jharkhand and beyond.</p>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-icon">👑</div>
+          <div>
+            <h4>Luxury Experience</h4>
+            <p>Every event designed with regal elegance and meticulous attention to detail that leaves guests speechless.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🤝</div>
+          <div>
+            <h4>Trusted Partnership</h4>
+            <p>Vivek Kumar personally oversees each event, ensuring your vision is executed to perfection every time.</p>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">⭐</div>
+          <div>
+            <h4>100% Satisfaction</h4>
+            <p>We stand by our promise — dream it, we plan it. You enjoy it, we take care of everything.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="section-header">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Our <em>Premium</em> Services</h2>
+    <p class="section-subtitle">Complete event solutions crafted with luxury and precision</p>
+  </div>
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-img-area" onclick="triggerUpload('svc1img')">
+        <img id="svc1imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc1imgPh">🌸</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc1img" accept="image/*" onchange="loadImage(this,'svc1imgP','svc1imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge">🌺</div>
+        <h3>Decoration</h3>
+        <p>Elegant & creative decor setups that transform any venue into a breathtaking wonderland — floral arrangements, draping, centrepieces, and thematic staging.</p>
+        <span class="service-tag">Signature Service</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-img-area" onclick="triggerUpload('svc2img')">
+        <img id="svc2imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc2imgPh">🎵</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc2img" accept="image/*" onchange="loadImage(this,'svc2imgP','svc2imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge">🎧</div>
+        <h3>DJ</h3>
+        <p>Powerful sound systems with the latest DJ setups and curated playlists to keep the energy alive throughout your celebration.</p>
+        <span class="service-tag">Premium Audio</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-img-area" onclick="triggerUpload('svc3img')">
+        <img id="svc3imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc3imgPh">🍽️</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc3img" accept="image/*" onchange="loadImage(this,'svc3imgP','svc3imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge">🥘</div>
+        <h3>Catering</h3>
+        <p>Delicious, hygienic & pure cuisine — from traditional Indian feasts to continental menus, crafted by master chefs for every palate.</p>
+        <span class="service-tag">Multi-Cuisine</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-img-area" onclick="triggerUpload('svc4img')">
+        <img id="svc4imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc4imgPh">💍</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc4img" accept="image/*" onchange="loadImage(this,'svc4imgP','svc4imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge">👰</div>
+        <h3>Wedding</h3>
+        <p>Complete wedding planning with elegant decor, guest coordination, rituals, hospitality, and seamless execution for every special moment.</p>
+        <span class="service-tag">Grand Celebration</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-img-area" onclick="triggerUpload('svc5img')">
+        <img id="svc5imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc5imgPh">📸</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc5img" accept="image/*" onchange="loadImage(this,'svc5imgP','svc5imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge">🎬</div>
+        <h3>Entertainment</h3>
+        <p>Photography, videography, live acts, cultural performances & much more to make your event a complete entertainment experience.</p>
+        <span class="service-tag">Live & Digital</span>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-img-area" onclick="triggerUpload('svc8img')">
+        <img id="svc8imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc8imgPh">🎉</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc8img" accept="image/*" onchange="loadImage(this,'svc8imgP','svc8imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge">🥂</div>
+        <h3>After Party</h3>
+        <p>High-energy after party setups with music, lounge styling, dance-floor coordination, and late-night hospitality for an unforgettable finale.</p>
+        <span class="service-tag">Party Finale</span>
+      </div>
+    </div>
+
+    <div class="service-card" style="border: 1.5px solid rgba(255,200,50,0.35); background: linear-gradient(180deg, #fffbf0 0%, #fff 100%);">
+      <div class="service-img-area" onclick="triggerUpload('svc7img')" style="background: linear-gradient(135deg, #7a4800, #c97c00);">
+        <img id="svc7imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc7imgPh" style="font-size:3rem;">🌼</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc7img" accept="image/*" onchange="loadImage(this,'svc7imgP','svc7imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge" style="background: linear-gradient(135deg, #F5C518, #E8A000);">🌿</div>
+        <h3 style="color: #7a4800;">Haldi Ceremony</h3>
+        <p>A vibrant and auspicious pre-wedding Haldi ritual styled with marigold décor, turmeric-yellow drapes, folk music, and traditional setup — making every moment joyful and picture-perfect.</p>
+        <div style="margin-top:0.75rem; display:flex; flex-wrap:wrap; gap:0.4rem;">
+          <span class="service-tag" style="background:rgba(245,197,24,0.15);color:#a07000;">Haldi Setup</span>
+          <span class="service-tag" style="background:rgba(245,197,24,0.15);color:#a07000;">Floral Decor</span>
+          <span class="service-tag" style="background:rgba(245,197,24,0.15);color:#a07000;">Folk Music</span>
+        </div>
+        <div style="margin-top:1rem; padding:0.75rem; background:rgba(245,197,24,0.08); border-left:2px solid #F5C518; border-radius:2px;">
+          <p style="font-size:0.72rem; color:#7a4800; font-family:'Cormorant Garamond',serif; font-style:italic; line-height:1.6;">
+            "Turmeric blessings, marigold memories — we create the perfect Haldi celebration for your special day."
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-img-area" onclick="triggerUpload('svc6img')">
+        <img id="svc6imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="service-img-placeholder" id="svc6imgPh">🚐</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="svc6img" accept="image/*" onchange="loadImage(this,'svc6imgP','svc6imgPh')">
+      </div>
+      <div class="service-body">
+        <div class="service-icon-badge">🎁</div>
+        <h3>More Services</h3>
+        <p>Venue scouting, transport coordination, invitation design, return gifts, and complete end-to-end event management tailored to your needs.</p>
+        <span class="service-tag">All Inclusive</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOSPITALITY -->
+<section class="hospitality-section" id="hospitality">
+  <div class="hosp-grid">
+    <div class="hosp-img-col">
+      <div class="hosp-img-box" onclick="triggerUpload('hosp1img')">
+        <img id="hosp1imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="hosp-img-placeholder" id="hosp1imgPh">🏨<br><small style="font-size:0.65rem;color:rgba(201,151,58,0.4);letter-spacing:1px;text-transform:uppercase;">Click to upload</small></div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="hosp1img" accept="image/*" onchange="loadImage(this,'hosp1imgP','hosp1imgPh')">
+      </div>
+      <div class="hosp-img-box" onclick="triggerUpload('hosp2img')">
+        <img id="hosp2imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="hosp-img-placeholder" id="hosp2imgPh">🍽️</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="hosp2img" accept="image/*" onchange="loadImage(this,'hosp2imgP','hosp2imgPh')">
+      </div>
+      <div class="hosp-img-box" onclick="triggerUpload('hosp3img')">
+        <img id="hosp3imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+        <div class="hosp-img-placeholder" id="hosp3imgPh">🛎️</div>
+        <div class="upload-overlay"><span>📷</span><span>Add Photo</span></div>
+        <input type="file" id="hosp3img" accept="image/*" onchange="loadImage(this,'hosp3imgP','hosp3imgPh')">
+      </div>
+    </div>
+    <div class="hosp-text">
+      <div class="section-label" style="color:var(--gold);">Hospitality</div>
+      <h2 class="section-title" style="color:var(--white);">Warm Hospitality,<br><em>Royal Treatment</em></h2>
+      <p class="section-subtitle">We believe every guest deserves to feel like royalty. Our hospitality services ensure a seamless, warm, and memorable experience for every attendee.</p>
+      <div class="hosp-items">
+        <div class="hosp-item">
+          <div class="hosp-num">01</div>
+          <div>
+            <h4>Guest Reception & Welcome</h4>
+            <p>Dedicated reception staff, floral welcomes, and personalised guest greeting for every attendee at your event.</p>
+          </div>
+        </div>
+        <div class="hosp-item">
+          <div class="hosp-num">02</div>
+          <div>
+            <h4>Accommodation Assistance</h4>
+            <p>Hotel tie-ups, room blocking, and seamless accommodation coordination for out-of-town guests and VIPs.</p>
+          </div>
+        </div>
+        <div class="hosp-item">
+          <div class="hosp-num">03</div>
+          <div>
+            <h4>F&B Management</h4>
+            <p>From welcome drinks to multi-course dinners, we manage full food & beverage service with elegance and care.</p>
+          </div>
+        </div>
+        <div class="hosp-item">
+          <div class="hosp-num">04</div>
+          <div>
+            <h4>Transport & Protocol</h4>
+            <p>Airport pickups, luxury vehicle arrangements, and VIP protocol management to ensure dignified arrivals.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why-section">
+  <div class="section-header">
+    <div class="section-label">Why Choose VK</div>
+    <h2 class="section-title">Best to Best <em>Planning</em></h2>
+    <p class="section-subtitle">Five pillars of excellence that define every VK event</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">👥</div>
+      <h4>Experienced Team</h4>
+      <p>Skilled professionals with years of event management expertise across all event types.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">✅</div>
+      <h4>Quality Service</h4>
+      <p>Premium vendors, luxury setups, and uncompromising quality at every touchpoint.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">⏰</div>
+      <h4>On Time Delivery</h4>
+      <p>Every detail ready before the first guest arrives — punctuality is our promise.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💰</div>
+      <h4>Affordable Packages</h4>
+      <p>Flexible packages designed to deliver luxury experiences within your budget.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">⭐</div>
+      <h4>100% Satisfaction</h4>
+      <p>We don't stop until you're completely happy — your smile is our success.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+  <div class="section-header">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-title">Our <em>Events</em> Gallery</h2>
+    <p class="section-subtitle">Click any cell to upload your event photos</p>
+  </div>
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-cell" onclick="triggerUpload('g1img')">
+      <img id="g1imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+      <div class="gallery-placeholder" id="g1imgPh"><span>💍</span><p>Wedding Event</p></div>
+      <div class="upload-overlay"><span>📷</span><span>Upload</span></div>
+      <input type="file" id="g1img" accept="image/*" onchange="loadImage(this,'g1imgP','g1imgPh')">
+    </div>
+    <div class="gallery-cell" onclick="triggerUpload('g2img')">
+      <img id="g2imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+      <div class="gallery-placeholder" id="g2imgPh"><span>🎂</span><p>Birthday Party</p></div>
+      <div class="upload-overlay"><span>📷</span><span>Upload</span></div>
+      <input type="file" id="g2img" accept="image/*" onchange="loadImage(this,'g2imgP','g2imgPh')">
+    </div>
+    <div class="gallery-cell" onclick="triggerUpload('g3img')">
+      <img id="g3imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+      <div class="gallery-placeholder" id="g3imgPh"><span>🏢</span><p>Corporate</p></div>
+      <div class="upload-overlay"><span>📷</span><span>Upload</span></div>
+      <input type="file" id="g3img" accept="image/*" onchange="loadImage(this,'g3imgP','g3imgPh')">
+    </div>
+    <div class="gallery-cell" onclick="triggerUpload('g4img')">
+      <img id="g4imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+      <div class="gallery-placeholder" id="g4imgPh"><span>💫</span><p>Anniversary</p></div>
+      <div class="upload-overlay"><span>📷</span><span>Upload</span></div>
+      <input type="file" id="g4img" accept="image/*" onchange="loadImage(this,'g4imgP','g4imgPh')">
+    </div>
+    <div class="gallery-cell" onclick="triggerUpload('g5img')">
+      <img id="g5imgP" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+      <div class="gallery-placeholder" id="g5imgPh"><span>🌺</span><p>Decoration</p></div>
+      <div class="upload-overlay"><span>📷</span><span>Upload</span></div>
+      <input type="file" id="g5img" accept="image/*" onchange="loadImage(this,'g5imgP','g5imgPh')">
+    </div>
+    <div class="gallery-cell add-gallery-btn" onclick="addGalleryCell()">
+      <span class="plus">+</span>
+      <span>Add More Photo</span>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<div class="coverage-section">
+  <h2>✦ Area of Coverage ✦</h2>
+  <p>Servicing All Over Jharkhand</p>
+  <div class="coverage-ornament">· · · · · · · · · ·</div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="section-header">
+    <div class="section-label" style="color:var(--gold);">Get In Touch</div>
+    <h2 class="section-title" style="color:var(--white);">Let's Make Your Event <em>Extraordinary</em></h2>
+    <p class="section-subtitle">Reach out and let Vivek Kumar craft your perfect celebration</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>Contact Details</h3>
+      <div class="contact-detail">
+        <span class="icon">📞</span>
+        <div>
+          <p>Call Us Today</p>
+          <a href="tel:6203924850">6203-924-850</a>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="icon">👤</span>
+        <div>
+          <p>Your Host</p>
+          <span>Vivek Kumar</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="icon">📍</span>
+        <div>
+          <p>Service Area</p>
+          <span>All Over Jharkhand</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="icon">⭐</span>
+        <div>
+          <p>Specialisation</p>
+          <span>All Special Occasions</span>
+        </div>
+      </div>
+      <div style="margin-top:2rem;padding:1.5rem;background:rgba(201,151,58,0.08);border:1px solid rgba(201,151,58,0.2);border-radius:4px;text-align:center;">
+        <p style="font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--gold-light);font-style:italic;line-height:1.8;">"Dream It — We Plan It<br>You Enjoy It — We Take Care<br>Your Vision — Our Passion"</p>
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3>Book Your Event</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="contactName" placeholder="Full Name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="contactPhone" placeholder="+91 XXXXX XXXXX">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="contactEmail" placeholder="your@email.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Type</label>
+          <select id="contactEventType">
+            <option value="">Select Event</option>
+            <option>Wedding</option>
+            <option>Haldi Ceremony</option>
+            <option>After Party</option>
+            <option>Birthday Party</option>
+            <option>Anniversary</option>
+            <option>Corporate Event</option>
+            <option>Hospitality Event</option>
+            <option>Other Occasion</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Event Date</label>
+          <input type="date" id="contactEventDate">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Expected Number of Guests</label>
+        <select id="contactGuests">
+          <option value="">Select Guest Count</option>
+          <option>Below 100</option>
+          <option>100 – 300</option>
+          <option>300 – 500</option>
+          <option>500 – 1000</option>
+          <option>1000+</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Special Requirements</label>
+        <textarea id="contactRequirements" placeholder="Tell us about your dream event, budget, or any special requests..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="submitForm()">✦ Send Enquiry ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">VK</div>
+  <p class="footer-tagline">Event Organizer · Vivek Kumar</p>
+  <div class="footer-divider"></div>
+  <p style="font-size:0.7rem;color:rgba(250,243,232,0.4);letter-spacing:3px;text-transform:uppercase;margin-bottom:0.75rem;">Your Vision · Our Passion · Perfect Execution</p>
+  <p class="footer-copy">© 2026 VK Event Organizer. Servicing All Over Jharkhand. 📞 6203-924-850 | <a href="admin.html" style="color: var(--gold); text-decoration: none; font-weight: 600; transition: color 0.3s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='var(--gold)'">Admin Panel</a></p>
+</footer>
+
+<div class="toast" id="toast">✦ Photo uploaded successfully!</div>
+
+<!-- Floating Settings Button -->
+<button class="db-settings-btn" title="Database Configuration" onclick="toggleSettingsModal(true)">⚙️</button>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>Google Sheets Database Setup</h3>
+      <button class="modal-close" onclick="toggleSettingsModal(false)">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="margin-bottom:1rem;color:var(--gold-light);">Configure your Google Sheets integration to permanently save uploaded images and booking inquiries.</p>
+      
+      <div class="form-group">
+        <label style="color:var(--gold);font-weight:600;font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;">Google Apps Script Web App URL</label>
+        <input type="text" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/.../exec" style="margin-top:0.5rem;width:100%;">
+      </div>
+      
+      <div style="display:flex;gap:0.75rem;margin-top:1rem;margin-bottom:1.5rem;">
+        <button class="btn-primary" onclick="saveSettings()" style="font-size:0.65rem;padding:10px 20px;">Save Settings</button>
+        <button class="btn-outline" onclick="testConnection()" style="font-size:0.65rem;padding:10px 20px;">Test Connection</button>
+      </div>
+
+      <hr style="border:0;border-top:1px solid rgba(201,151,58,0.2);margin:1.5rem 0;">
+
+      <h4 style="font-size:0.95rem;">Setup Instructions (Hindi / English)</h4>
+      <ol style="margin-top:0.5rem;">
+        <li>Create a new <strong>Google Sheet</strong> in your Google account.</li>
+        <li>In the Google Sheet menu, go to <strong>Extensions</strong> -> <strong>Apps Script</strong>.</li>
+        <li>Delete any existing code in the editor and paste the code below:</li>
+      </ol>
+
+      <div class="code-block-container">
+        <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+        <pre class="code-block" id="appsScriptCode">
+// GOOGLE APPS SCRIPT BACKEND CODE
+const FOLDER_NAME = "VK Event Organizer Images";
+
+function doGet(e) {
+  const action = e && e.parameter && e.parameter.action;
+  if (action === "getEnquiries") {
+    return handleResponse(getEnquiries());
+  }
+  return handleResponse(getImages());
+}
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const action = data.action;
+    
+    if (action === "uploadImage") {
+      const result = uploadImageToDrive(data.slotId, data.imageName, data.mimeType, data.base64Data);
+      return handleResponse(result);
+    } else if (action === "submitEnquiry") {
+      const result = saveEnquiry(data);
+      return handleResponse(result);
+    } else {
+      return handleResponse({ error: "Invalid action" });
+    }
+  } catch (error) {
+    return handleResponse({ error: error.toString() });
+  }
+}
+
+function handleResponse(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type"
+    });
+}
+
+function getOrCreateFolder() {
+  const folders = DriveApp.getFoldersByName(FOLDER_NAME);
+  if (folders.hasNext()) {
+    return folders.next();
+  }
+  const folder = DriveApp.createFolder(FOLDER_NAME);
+  return folder;
+}
+
+function getOrCreateSheet(sheetName, headers) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(sheetName);
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
+  }
+  return sheet;
+}
+
+function getImages() {
+  const sheet = getOrCreateSheet("Images", ["Slot ID", "Image URL", "File ID", "Timestamp"]);
+  const data = sheet.getDataRange().getValues();
+  const images = {};
+  for (let i = 1; i < data.length; i++) {
+    const slotId = data[i][0];
+    const url = data[i][1];
+    if (slotId && url) {
+      images[slotId] = url;
+    }
+  }
+  return { success: true, images: images };
+}
+
+function getEnquiries() {
+  const sheet = getOrCreateSheet("Enquiries", [
+    "Timestamp", 
+    "Name", 
+    "Phone", 
+    "Email", 
+    "Event Type", 
+    "Event Date", 
+    "Guests", 
+    "Requirements"
+  ]);
+  const data = sheet.getDataRange().getValues();
+  const enquiries = [];
+  for (let i = 1; i < data.length; i++) {
+    enquiries.push({
+      timestamp: data[i][0],
+      name: data[i][1],
+      phone: data[i][2],
+      email: data[i][3],
+      eventType: data[i][4],
+      eventDate: data[i][5],
+      guests: data[i][6],
+      requirements: data[i][7]
+    });
+  }
+  enquiries.reverse(); // Latest enquiries first
+  return { success: true, enquiries: enquiries };
+}
+
+function uploadImageToDrive(slotId, imageName, mimeType, base64Data) {
+  const folder = getOrCreateFolder();
+  const decoded = Utilities.base64Decode(base64Data);
+  const blob = Utilities.newBlob(decoded, mimeType, imageName);
+  const file = folder.createFile(blob);
+  
+  file.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.VIEW);
+  
+  const fileId = file.getId();
+  const imageUrl = "https://lh3.googleusercontent.com/d/" + fileId + "=s1600";
+  
+  const sheet = getOrCreateSheet("Images", ["Slot ID", "Image URL", "File ID", "Timestamp"]);
+  const data = sheet.getDataRange().getValues();
+  let foundRow = -1;
+  
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][0] === slotId) {
+      foundRow = i + 1;
+      break;
+    }
+  }
+  
+  const now = new Date();
+  if (foundRow !== -1) {
+    const oldFileId = data[foundRow - 1][2];
+    if (oldFileId) {
+      try { DriveApp.getFileById(oldFileId).setTrashed(true); } catch (e) {}
+    }
+    sheet.getRange(foundRow, 2).setValue(imageUrl);
+    sheet.getRange(foundRow, 3).setValue(fileId);
+    sheet.getRange(foundRow, 4).setValue(now);
+  } else {
+    sheet.appendRow([slotId, imageUrl, fileId, now]);
+  }
+  
+  return { success: true, imageUrl: imageUrl };
+}
+
+function saveEnquiry(data) {
+  const sheet = getOrCreateSheet("Enquiries", [
+    "Timestamp", 
+    "Name", 
+    "Phone", 
+    "Email", 
+    "Event Type", 
+    "Event Date", 
+    "Guests", 
+    "Requirements"
+  ]);
+  
+  const now = new Date();
+  sheet.appendRow([
+    now,
+    data.name || "",
+    data.phone || "",
+    data.email || "",
+    data.eventType || "",
+    data.eventDate || "",
+    data.guests || "",
+    data.requirements || ""
+  ]);
+  
+  return { success: true };
+}</pre>
+      </div>
+
+      <ol start="4" style="margin-top:1rem;">
+        <li>Click on <strong>Save</strong> (floppy icon).</li>
+        <li>Click <strong>Deploy</strong> -> <strong>New deployment</strong> (top right).</li>
+        <li>Click the gear icon next to "Select type" and select <strong>Web app</strong>.</li>
+        <li>Set the configurations:
+          <ul>
+            <li>Description: <code>VK Event Organizer Database</code></li>
+            <li>Execute as: <strong>Me</strong> (your email)</li>
+            <li>Who has access: <strong>Anyone</strong></li>
+          </ul>
+        </li>
+        <li>Click <strong>Deploy</strong>, authorize the permissions (click "Advanced" and "Go to Untitled project" if prompted).</li>
+        <li>Copy the <strong>Web app URL</strong> shown, paste it in the field above, and click <strong>Save Settings</strong>!</li>
+      </ol>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="toggleSettingsModal(false)" style="font-size:0.65rem;padding:8px 16px;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Google Sheets Apps Script URL Settings
+  let SCRIPT_URL = localStorage.getItem('vk_sheet_db_url') || '';
+
+  // Initialize input field, image handlers, local fallback images, and database images on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('scriptUrlInput');
+    if (input) {
+      input.value = SCRIPT_URL;
+    }
+    initImageHandlers();
+    loadLocalImages();
+    loadDatabaseImages();
+  });
+
+  // Bind onload/onerror to images dynamically
+  function initImageHandlers() {
+    document.querySelectorAll('img[id$="P"], img[id$="Preview"]').forEach(img => {
+      const slotId = img.id.endsWith('Preview') ? img.id.replace('Preview', '') : img.id.slice(0, -1);
+      const placeholder = document.getElementById(slotId + 'Ph') || document.getElementById(slotId + 'Placeholder');
+
+      img.onload = () => {
+        img.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+      };
+
+      img.onerror = () => {
+        img.style.display = 'none';
+        if (placeholder) placeholder.style.display = 'block';
+      };
+    });
+  }
+
+  // Load local images from the "images" folder as default/fallback
+  function loadLocalImages() {
+    const localSlots = [
+      'aboutImg', 'svc1img', 'svc2img', 'svc3img', 'svc4img', 'svc5img', 'svc6img', 'svc7img', 'svc8img',
+      'hosp1img', 'hosp2img', 'hosp3img',
+      'g1img', 'g2img', 'g3img', 'g4img', 'g5img'
+    ];
+
+    localSlots.forEach(slotId => {
+      const previewId = slotId + 'P';
+      const fallbackPreviewId = slotId + 'Preview';
+      const preview = document.getElementById(previewId) || document.getElementById(fallbackPreviewId);
+      if (preview) {
+        // Set standard local path
+        preview.src = `images/${slotId}.jpg`;
+      }
+    });
+  }
+
+  function toggleSettingsModal(show) {
+    const modal = document.getElementById('settingsModal');
+    if (show) {
+      modal.classList.add('open');
+      const input = document.getElementById('scriptUrlInput');
+      if (input) input.value = SCRIPT_URL;
+    } else {
+      modal.classList.remove('open');
+    }
+  }
+
+  function saveSettings() {
+    const input = document.getElementById('scriptUrlInput');
+    if (input) {
+      const url = input.value.trim();
+      SCRIPT_URL = url;
+      localStorage.setItem('vk_sheet_db_url', url);
+      showToast('✦ Settings saved successfully!');
+      toggleSettingsModal(false);
+      loadDatabaseImages(); // Reload images using new URL
+    }
+  }
+
+  function testConnection() {
+    if (!SCRIPT_URL) {
+      alert('Please enter a Google Apps Script URL first!');
+      return;
+    }
+    showToast('✦ Testing connection...');
+    fetch(SCRIPT_URL)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.success) {
+          alert('Connection Successful! Connected to Google Sheet database.');
+        } else {
+          alert('Connected, but sheet returned an unexpected response. Please check Apps Script.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Connection Failed! Please make sure your Apps Script Web App is deployed with "Anyone" having access, and check CORS settings.');
+      });
+  }
+
+  function copyCode() {
+    const code = document.getElementById('appsScriptCode').textContent;
+    navigator.clipboard.writeText(code)
+      .then(() => showToast('✦ Code copied to clipboard!'))
+      .catch(() => alert('Could not copy code. Please select and copy manually.'));
+  }
+
+  function triggerUpload(id) {
+    document.getElementById(id).click();
+  }
+
+  // Load saved images from Google Sheets or Local Server on page load
+  function loadDatabaseImages() {
+    const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const fetchUrl = isLocalServer ? '/api/images' : SCRIPT_URL;
+
+    if (!fetchUrl) {
+      console.log('No Google Sheets URL or local database set. Running in fallback mode.');
+      return;
+    }
+
+    fetch(fetchUrl)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.success && data.images) {
+          const images = data.images;
+          Object.keys(images).forEach(slotId => {
+            const url = images[slotId];
+            if (!url) return;
+
+            // Handle dynamic gallery slots
+            if (slotId.startsWith('g')) {
+              const count = parseInt(slotId.replace('g', '').replace('img', ''), 10);
+              if (!isNaN(count) && count > galleryCount) {
+                // Keep adding slots until we match this gallery count
+                while (galleryCount < count) {
+                  createGalleryCellPlaceholder();
+                }
+              }
+            }
+
+            const previewId = slotId + 'P';
+            const placeholderId = slotId + 'Ph';
+            
+            const preview = document.getElementById(previewId);
+            const placeholder = document.getElementById(placeholderId);
+            
+            if (preview) {
+              preview.src = url;
+              preview.style.display = 'block';
+            }
+            if (placeholder) {
+              placeholder.style.display = 'none';
+            }
+          });
+        }
+      })
+      .catch(err => console.error('Error loading database images:', err));
+  }
+
+  // Helper to create empty gallery slot during dynamic load
+  function createGalleryCellPlaceholder() {
+    galleryCount++;
+    const grid = document.getElementById('galleryGrid');
+    const addBtn = grid.querySelector('.add-gallery-btn');
+
+    const cell = document.createElement('div');
+    cell.className = 'gallery-cell';
+    const uid = 'g' + galleryCount + 'img';
+    cell.innerHTML = `
+      <img id="${uid}P" src="" style="display:none;width:100%;height:100%;object-fit:cover;">
+      <div class="gallery-placeholder" id="${uid}Ph"><span>📷</span><p>Your Photo</p></div>
+      <div class="upload-overlay"><span>📷</span><span>Upload</span></div>
+      <input type="file" id="${uid}" accept="image/*" onchange="loadImage(this,'${uid}P','${uid}Ph')">
+    `;
+    cell.onclick = () => triggerUpload(uid);
+    grid.insertBefore(cell, addBtn);
+
+    // Bind image load/error logic for this new dynamic cell
+    const newImg = cell.querySelector('img');
+    const newPlaceholder = cell.querySelector('.gallery-placeholder');
+    newImg.onload = () => {
+      newImg.style.display = 'block';
+      newPlaceholder.style.display = 'none';
+    };
+    newImg.onerror = () => {
+      newImg.style.display = 'none';
+      newPlaceholder.style.display = 'block';
+    };
+  }
+
+  // Upload select image to Google Drive / Sheet / Local Server
+  function loadImage(input, previewId, placeholderId) {
+    if (!input.files || !input.files[0]) return;
+
+    const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const uploadUrl = isLocalServer ? '/api/upload' : SCRIPT_URL;
+
+    if (!uploadUrl) {
+      // Prompt user to configure database
+      alert('Google Sheets Database URL is not set. Please click the gear icon (⚙️) at the bottom-left to set it up so images save permanently!');
+      
+      // Fallback local preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById(previewId);
+        const placeholder = document.getElementById(placeholderId);
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+        showToast('✦ Local preview loaded (Not saved to database)');
+      };
+      reader.readAsDataURL(input.files[0]);
+      return;
+    }
+
+    const file = input.files[0];
+    const slotId = input.id;
+    const preview = document.getElementById(previewId);
+    const placeholder = document.getElementById(placeholderId);
+    
+    // Create and attach loading spinner overlay to the parent element
+    const parent = input.parentElement;
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'uploading-overlay';
+    loadingOverlay.innerHTML = `
+      <div class="spinner"></div>
+      <span style="font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Saving...</span>
+    `;
+    parent.appendChild(loadingOverlay);
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const base64Data = e.target.result.split(',')[1];
+      const payload = {
+        action: "uploadImage",
+        slotId: slotId,
+        imageName: file.name,
+        mimeType: file.type,
+        base64Data: base64Data
+      };
+
+      fetch(uploadUrl, {
+        method: 'POST',
+        mode: isLocalServer ? 'cors' : 'no-cors',
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => isLocalServer ? res.json() : null)
+      .then(data => {
+        setTimeout(() => {
+          if (loadingOverlay.parentNode) {
+            loadingOverlay.parentNode.removeChild(loadingOverlay);
+          }
+          // Set preview source (add cache-busting timestamp in local server mode to update instantly)
+          preview.src = (data && data.imageUrl) ? (data.imageUrl + '?t=' + Date.now()) : e.target.result;
+          preview.style.display = 'block';
+          if (placeholder) placeholder.style.display = 'none';
+          showToast('✦ Photo uploaded and saved successfully!');
+        }, 1500);
+      })
+      .catch(err => {
+        console.error('Error uploading photo:', err);
+        if (loadingOverlay.parentNode) {
+          loadingOverlay.parentNode.removeChild(loadingOverlay);
+        }
+        alert('Upload failed. Please check your network and Google Apps Script URL settings.');
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  let galleryCount = 5;
+  function addGalleryCell() {
+    createGalleryCellPlaceholder();
+    showToast('✦ New photo slot added! Click to upload.');
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg || '✦ Photo uploaded successfully!';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  // Submit contact enquiry to Google Sheets or Local Server
+  function submitForm() {
+    const name = document.getElementById('contactName').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const eventType = document.getElementById('contactEventType').value;
+    const eventDate = document.getElementById('contactEventDate').value;
+    const guests = document.getElementById('contactGuests').value;
+    const requirements = document.getElementById('contactRequirements').value.trim();
+
+    if (!name || !phone) {
+      alert('Please enter your Name and Phone Number.');
+      return;
+    }
+
+    const submitBtn = document.querySelector('.contact-form .btn-submit');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = '✦ Sending... ✦';
+    submitBtn.disabled = true;
+
+    const isLocalServer = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const submitUrl = isLocalServer ? '/api/enquiries' : SCRIPT_URL;
+
+    if (!submitUrl) {
+      // Mock submit if offline/not configured
+      setTimeout(() => {
+        alert('Enquiry Sent! (Offline Preview Mode - set Google Sheets URL to save permanently)');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        resetForm();
+      }, 1000);
+      return;
+    }
+
+    const payload = {
+      action: "submitEnquiry",
+      name,
+      phone,
+      email,
+      eventType,
+      eventDate,
+      guests,
+      requirements
+    };
+
+    fetch(submitUrl, {
+      method: 'POST',
+      mode: isLocalServer ? 'cors' : 'no-cors',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(() => {
+      showToast('✦ Enquiry sent! Vivek Kumar will contact you shortly.');
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+      resetForm();
+    })
+    .catch(err => {
+      console.error('Submit enquiry error:', err);
+      alert('Failed to send enquiry. Please check connection and settings.');
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    });
+  }
+
+  function resetForm() {
+    document.getElementById('contactName').value = '';
+    document.getElementById('contactPhone').value = '';
+    document.getElementById('contactEmail').value = '';
+    document.getElementById('contactEventType').value = '';
+    document.getElementById('contactEventDate').value = '';
+    document.getElementById('contactGuests').value = '';
+    document.getElementById('contactRequirements').value = '';
+  }
+
+  // Smooth reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .why-card, .hosp-item, .pillar').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2026-07-03T11:43:29.652550",
+    "name": "Himanshu Pathak",
+    "phone": "8588050920",
+    "email": "himanshu.data.acc@gmail.com",
+    "eventType": "Corporate Event",
+    "eventDate": "2026-06-30",
+    "guests": "500 – 1000",
+    "requirements": "ds"
+  },
+  {
+    "timestamp": "2026-06-27T12:01:19.187284",
+    "name": "himanshu",
+    "phone": "8588050920",
+    "email": "himanshu@gmail.com",
+    "eventType": "Wedding",
+    "eventDate": "2026-06-05",
+    "guests": "Below 100",
+    "requirements": "l"
+  },
+  {
+    "timestamp": "2026-06-27T11:45:00Z",
+    "name": "Piyush Kumar",
+    "phone": "+91 98765 43210",
+    "email": "piyush@example.com",
+    "eventType": "Wedding",
+    "eventDate": "2026-11-20",
+    "guests": "500 – 1000",
+    "requirements": "Need premium floral decor and high-quality DJ sound setup. Traditional welcome gates for guests."
+  },
+  {
+    "timestamp": "2026-06-27T10:30:00Z",
+    "name": "Amit Sharma",
+    "phone": "+91 87654 32109",
+    "email": "amit@example.com",
+    "eventType": "Haldi Ceremony",
+    "eventDate": "2026-10-15",
+    "guests": "100 – 300",
+    "requirements": "Yellow theme decorations with marigold flowers and traditional sitting setup. Need folk music instruments."
+  }
+]
