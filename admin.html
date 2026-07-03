@@ -376,8 +376,9 @@
   </main>
 </div>
 
+<script src="site-config.js"></script>
 <script>
-  let SCRIPT_URL = localStorage.getItem('vk_sheet_db_url') || '';
+  let SCRIPT_URL = localStorage.getItem('vk_sheet_db_url') || (window.VK_CONFIG && window.VK_CONFIG.SHEET_DB_URL) || '';
   let allEnquiries = [];
 
   // Check authentication and setup local server status indicators on load

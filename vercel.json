@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/vk-event-organizer%20(2).html"
+    }
+  ]
+}

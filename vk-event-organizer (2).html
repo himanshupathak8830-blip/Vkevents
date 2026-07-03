@@ -1245,9 +1245,10 @@ function saveEnquiry(data) {
   </div>
 </div>
 
+<script src="site-config.js"></script>
 <script>
   // Google Sheets Apps Script URL Settings
-  let SCRIPT_URL = localStorage.getItem('vk_sheet_db_url') || '';
+  let SCRIPT_URL = localStorage.getItem('vk_sheet_db_url') || (window.VK_CONFIG && window.VK_CONFIG.SHEET_DB_URL) || '';
 
   // Initialize input field, image handlers, local fallback images, and database images on load
   document.addEventListener('DOMContentLoaded', () => {
