@@ -8,8 +8,13 @@ Static event organizer website ready for Vercel deployment.
 - Build command: leave empty
 - Output directory: leave empty
 - Root route `/` is handled by `vercel.json`
+- `index.html` redirects to the main event page so static hosts can open the site without custom routing.
 
 Private/local files such as `enquiries.json` and `server.py` are excluded from Vercel through `.vercelignore`.
+
+## GitHub Pages Warning
+
+If GitHub Actions shows a warning like `Node.js 20 is deprecated` for `actions/checkout@v4` or `actions/upload-artifact@v4`, it is coming from GitHub's generated Pages workflow. It is not a Vercel build error. For Vercel-only deployment, disable GitHub Pages in repository settings or ignore that Pages workflow.
 
 ## Production Database
 
